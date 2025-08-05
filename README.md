@@ -16,24 +16,10 @@ AWS将在**2025年10月31日**对中国区域的Health Dashboard EventBridge集�
 
 ### 当前行为（2025年10月31日前）
 
-```mermaid
-flowchart LR
-    subgraph Beijing["🏢 北京区域"]
-        A1[北京 Health Event] --> B1[📡 北京 EventBridge]
-        B1 --> C1[✅ 你的规则触发]
-        C1 --> D1[📧 收到通知]
-    end
-    
-    subgraph Ningxia["🏢 宁夏区域"]
-        A2[宁夏 Health Event] --> B2[📡 宁夏 EventBridge]
-        B2 --> C2[❌ 你的北京规则不触发]
-    end
-    
-    style Beijing fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style Ningxia fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    style C1 fill:#c8e6c9,stroke:#388e3c
-    style C2 fill:#ffcdd2,stroke:#d32f2f
-```
+| 🏢 **北京区域** | 🏢 **宁夏区域** |
+|---|---|
+| 北京Health事件 → 北京EventBridge → ✅ **你的规则触发** → 📧 收到通知 | 宁夏Health事件 → 宁夏EventBridge → ❌ **你的北京规则不触发** |
+| **结果**: 只收到北京区域的健康事件通知 | **结果**: 不会收到宁夏区域的健康事件通知 |
 
 ### 新行为（2025年10月31日后 - 不修改规则）
 
@@ -77,27 +63,14 @@ graph TB
 
 ### 解决方案对比
 
-```mermaid
-flowchart LR
-    subgraph Option1["✅ 选项1: 添加区域过滤器（推荐）"]
-        A1[🔧 修改规则] --> B1[📝 添加 eventRegion 过滤器]
-        B1 --> C1[✅ 只收到本区域事件]
-        C1 --> D1[😊 保持原有行为]
-    end
-    
-    subgraph Option2["⚠️ 选项2: 不修改规则"]
-        A2[🤷 保持现状] --> B2[📬 接收两个区域事件]
-        B2 --> C2[⚠️ 可能重复通知]
-        C2 --> D2[🔄 需要去重处理]
-    end
-    
-    style Option1 fill:#e8f5e8,stroke:#4caf50,stroke-width:2px
-    style Option2 fill:#fff3e0,stroke:#ff9800,stroke-width:2px
-    style C1 fill:#c8e6c9,stroke:#388e3c
-    style D1 fill:#c8e6c9,stroke:#388e3c
-    style C2 fill:#ffecb3,stroke:#f57c00
-    style D2 fill:#ffcdd2,stroke:#d32f2f
-```
+| ✅ **选项1: 添加区域过滤器（推荐）** | ⚠️ **选项2: 不修改规则** |
+|---|---|
+| 🔧 修改EventBridge规则 | 🤷 保持现状不变 |
+| 📝 添加 `eventRegion` 过滤器 | � 开始e接收两个区域的事件 |
+| ✅ 只收到本区域事件 | ⚠️ 可能收到重复通知 |
+| 😊 **保持原有行为不变** | � *有*需要实现去重处理逻辑** |
+| **优点**: 简单、可靠、无副作用 | **优点**: 无需修改配置 |
+| **缺点**: 需要手动修改规则 | **缺点**: 需要处理重复事件，增加复杂性 |
 
 ## 🎯 推荐解决方案
 
