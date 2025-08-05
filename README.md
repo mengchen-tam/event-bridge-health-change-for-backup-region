@@ -17,17 +17,21 @@ AWS将在**2025年10月31日**对中国区域的Health Dashboard EventBridge集�
 ### 当前行为（2025年10月31日前）
 
 ```mermaid
-graph LR
+flowchart LR
     subgraph Beijing["🏢 北京区域"]
+        direction TB
         A1[北京 Health Event] --> B1[📡 北京 EventBridge]
         B1 --> C1[✅ 你的规则触发]
         C1 --> D1[📧 收到通知]
     end
     
-    subgraph Ningxia["🏢 宁夏区域"]
+    subgraph Ningxia["🏢 宁夏区域"]  
+        direction TB
         A2[宁夏 Health Event] --> B2[📡 宁夏 EventBridge]
         B2 --> C2[❌ 你的北京规则不触发]
     end
+    
+    Beijing ~~~ Ningxia
     
     style Beijing fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
     style Ningxia fill:#fff3e0,stroke:#f57c00,stroke-width:2px
@@ -78,18 +82,22 @@ graph TB
 ### 解决方案对比
 
 ```mermaid
-graph LR
+flowchart LR
     subgraph Option1["✅ 选项1: 添加区域过滤器（推荐）"]
+        direction TB
         A1[🔧 修改规则] --> B1[📝 添加 eventRegion 过滤器]
         B1 --> C1[✅ 只收到本区域事件]
         C1 --> D1[😊 保持原有行为]
     end
     
     subgraph Option2["⚠️ 选项2: 不修改规则"]
+        direction TB
         A2[🤷 保持现状] --> B2[📬 接收两个区域事件]
         B2 --> C2[⚠️ 可能重复通知]
         C2 --> D2[🔄 需要去重处理]
     end
+    
+    Option1 ~~~ Option2
     
     style Option1 fill:#e8f5e8,stroke:#4caf50,stroke-width:2px
     style Option2 fill:#fff3e0,stroke:#ff9800,stroke-width:2px
